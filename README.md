@@ -52,7 +52,7 @@ OrbitalWitnessApiTask/
 │   ├── test_credit_calculator.py   # Unit tests for credit calculator
 │   └── requirements_test.txt       # Dependencies for testing
 ├── README.md                       # Project documentation
-└── pytest.ini                      # Pytest configuration
+└── pyproject.toml                  # Pytest/Project configuration
 
 ```
 
