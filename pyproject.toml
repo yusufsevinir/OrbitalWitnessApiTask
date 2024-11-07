@@ -1,0 +1,13 @@
+[project]
+name = "orbital-witness-api-task"
+version = "0.1.0"
+authors = [
+    { name = "Yusuf Sevinir" },
+]
+description = "Orbital Witness API Task"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "."
+] 
