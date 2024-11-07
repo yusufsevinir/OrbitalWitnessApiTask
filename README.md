@@ -2,25 +2,27 @@ Orbital Witness API Task
 
 Overview
 
-The Orbital Witness API Task is a Python-based solution designed to calculate usage credits for an AI-powered assistant called Orbital Copilot. The system processes user messages, calculates credits based on configurable rules, and determines the total credits consumed during a billing period. The project uses FastAPI for the API layer, and several Python utilities for core logic.
+The Orbital Witness API Task is a Python-based solution developed to calculate usage credits for an AI-powered assistant, Orbital Copilot. The system processes user messages, applies configurable credit calculation rules, and determines the total credits consumed during a billing period. Built with FastAPI, it provides a robust and extensible API for usage data retrieval and credit computations.
 
 Features
 
 	•	Credit Calculation:
-		    Base cost per message.
-		    Character count costs.
-		    Word-length multipliers.
-	    	Special rules for third vowels, length penalties, unique word bonuses, and palindromes.
+	•	Base cost per message.
+	•	Character count costs.
+	•	Word-length multipliers.
+	•	Advanced rules for:
+	•	Third vowels.
+	•	Length penalties.
+	•	Unique word bonuses.
+	•	Palindromes.
 	•	Fallback Mechanism:
-		    Handles scenarios where external data (e.g., report details) is unavailable.
+	•	Graceful handling of unavailable external data (e.g., missing report details).
 	•	API Endpoints:
-	    	/usage: Returns usage data for the current billing period.
+	•	/usage: Returns detailed usage data for the current billing period.
 	•	Extensible Design:
-	        Modularity allows easy addition of new rules and adjustments to the existing logic.
+	•	Modular architecture supports easy addition of new rules or adjustment of existing logic.
 
 Project Structure
-
-The project is structured for maintainability, scalability, and testability:
 
 OrbitalWitnessApiTask/
 ├── src/
@@ -29,24 +31,24 @@ OrbitalWitnessApiTask/
 │   │   ├── main.py                 # FastAPI app entry point
 │   ├── clients/
 │   │   ├── __init__.py
-│   │   ├── external_api_client.py  # Handles external API requests
+│   │   ├── external_api_client.py  # External API client for fetching messages/reports
 │   ├── services/
 │   │   ├── __init__.py
-│   │   ├── usage_service.py        # Core business logic
+│   │   ├── usage_service.py        # Core logic for usage and credits
 │   ├── utils/
 │   │   ├── __init__.py
-│   │   ├── credit_calculator.py    # Handles credit calculation logic
+│   │   ├── credit_calculator.py    # Implements credit calculation logic
 │   ├── config.py                   # Configuration settings
-│   └── requirements.txt            # Dependencies for the app
+│   └── requirements.txt            # App dependencies
 ├── tests/
 │   ├── __init__.py
-│   ├── test_main.py                 # Tests for FastAPI routes
-│   ├── test_usage_service.py        # Tests for usage service
-│   ├── test_external_api_client.py  # Tests for API client
-│   ├── test_credit_calculator.py    # Tests for credit calculator
-│   └── requirements_test.txt        # Dependencies for testing
-├── README.md                        # Project documentation
-└── pytest.ini                       # Configuration for pytest
+│   ├── test_main.py                # Tests for FastAPI endpoints
+│   ├── test_usage_service.py       # Unit tests for usage service
+│   ├── test_external_api_client.py # Unit tests for API client
+│   ├── test_credit_calculator.py   # Unit tests for credit calculator
+│   └── requirements_test.txt       # Dependencies for testing
+├── README.md                       # Project documentation
+└── pytest.ini                      # Pytest configuration
 
 Installation
 
@@ -59,33 +61,33 @@ Steps
 
 	1.	Clone the repository:
 
-        git clone https://github.com/yusufsevinir/OrbitalWitnessApiTask.git
-        cd OrbitalWitnessApiTask
+git clone https://github.com/yusufsevinir/OrbitalWitnessApiTask.git
+cd OrbitalWitnessApiTask
 
 
 	2.	Create a virtual environment:
 
-        python3 -m venv venv
-        source venv/bin/activate   # On Windows: venv\Scripts\activate
+python3 -m venv venv
+source venv/bin/activate   # On Windows: venv\Scripts\activate
 
 
-	3.	Install dependencies for the app:
+	3.	Install dependencies:
 
-        pip install -r src/requirements.txt
+pip install -r src/requirements.txt
 
 
-	4.	Install dependencies for testing:
+	4.	Install testing dependencies:
 
-        pip install -r tests/requirements_test.txt
+pip install -r tests/requirements_test.txt
 
 
 	5.	Run the FastAPI application:
 
-        uvicorn src.app.main:app --reload
+uvicorn src.app.main:app --reload
 
 
 	6.	Access the API documentation:
-		Open your browser and navigate to http://127.0.0.1:8000/docs.
+Open http://127.0.0.1:8000/docs in your browser.
 
 Usage
 
@@ -95,7 +97,7 @@ API Endpoints
 
 	•	Method: GET
 	•	Description: Returns usage data for the current billing period.
-	•	Response Format:
+	•	Example Response:
 
 {
   "usage": [
@@ -117,9 +119,7 @@ Testing
 
 Run Tests
 
-To run the tests, use the following command:
-
-    pytest tests/
+pytest tests/
 
 Test Coverage
 
@@ -127,71 +127,63 @@ Test Coverage
 	•	FastAPI routes.
 	•	Usage service logic.
 	•	External API client.
-	•	Credit calculation logic (all rules covered).
+	•	Credit calculation rules.
 
 Configuration
 
 External Endpoints
 
-	•	src/clients/external_api_client.py is configured to fetch data from the following endpoints:
-	    https://owpublic.blob.core.windows.net/tech-task/messages/current-period: Fetches messages for the current billing period.
-	    https://owpublic.blob.core.windows.net/tech-task/reports/:id: Fetches details for a specific report.
+	•	src/clients/external_api_client.py fetches data from:
+	•	Messages: https://owpublic.blob.core.windows.net/tech-task/messages/current-period
+	•	Report Details: https://owpublic.blob.core.windows.net/tech-task/reports/:id
 
 Editable Settings
 
-	•	Update the base URL or endpoints in src/config.py.
-
-Design Decisions
-
-	1.	Separation of Concerns:
-	    •	Each module handles a specific responsibility (e.g., credit_calculator.py handles only credit calculations).
-	2.	Extensibility:
-	    •	The design allows for new rules or calculation methods to be added easily.
-	3.	Error Handling:
-	    •	Handles API failures gracefully, using fallbacks when report details are unavailable.
-	4.	Testing:
-	    •	Comprehensive test coverage for individual components and overall system behavior.
+	•	Configure base URLs and endpoints in src/config.py.
 
 Credit Calculation Rules
 
-The following rules are applied to determine credits for each message:
 	1.	Base Cost:
-	    •	Every message starts with a base cost of 1 credit.
+	•	Every message starts with 1 credit.
 	2.	Character Count:
-	    •	Add 0.05 credits for each character in the message.
+	•	Add 0.05 credits per character in the message.
 	3.	Word Length Multipliers:
-	    •	Words of 1-3 characters: +0.1 credits per word.
-	    •	Words of 4-7 characters: +0.2 credits per word.
-	    •	Words of 8+ characters: +0.3 credits per word.
+	•	1-3 characters: +0.1 credits per word.
+	•	4-7 characters: +0.2 credits per word.
+	•	8+ characters: +0.3 credits per word.
 	4.	Third Vowels:
-	    •	Add 0.3 credits for each third character that is a vowel.
+	•	Add 0.3 credits for each third vowel in the message.
 	5.	Length Penalty:
-	    •	Add 5 credits if the message exceeds 100 characters.
+	•	Add 5 credits if the message exceeds 100 characters.
 	6.	Unique Word Bonus:
-	    •	Subtract 2 credits if all words are unique and there are more than one word(minimum credit is still 1).
+	•	Subtract 2 credits if all words are unique (minimum 1 credit).
 	7.	Palindrome Check:
-	    •	Double the total credits if the message is a multi-character palindrome.
+	•	Double the total credits if the message is a multi-character palindrome.
 
 Example Scenarios
 
 Scenario 1: Single Word
 
-	•	Input: "hello"
-	•	Output: Base + char count + word multiplier = 1 + 0.25 + 0.2 = 1.45 credits.
+	•	Input: “hello”
+	•	Output: Base + char count + word multiplier = 1 + 0.25 + 0.2 = 1.45 credits
 
 Scenario 2: Palindrome
 
-	•	Input: "madam"
-	•	Output: Base + char count + word multiplier (doubled) = 1.45 * 2 = 2.9 credits.
+	•	Input: “madam”
+	•	Output: Base + char count + word multiplier (doubled) = 1.45 * 2 = 2.9 credits
 
 Scenario 3: Long Text
 
-	•	Input: "A" * 101 (101 characters of A).
-	•	Output: Base + char count + length penalty = 1 + 5.05 + 5 = 11.05 credits.
+	•	Input: 101 characters (“A” * 101)
+	•	Output: Base + char count + length penalty = 1 + 5.05 + 5 = 11.05 credits
 
-Contact
+Design Decisions
 
-For questions or support, feel free to reach out:
-	•	Author: Yusuf Sevinir
-	•	Email:  yusufsevinir@gmail.com
-	•	GitHub: https://github.com/yusufsevinir
+	1.	Separation of Concerns:
+	•	Each module has a distinct responsibility (e.g., credit_calculator.py for rule logic).
+	2.	Extensibility:
+	•	Easily add new credit rules or API endpoints.
+	3.	Error Handling:
+	•	Fallbacks ensure continued functionality even when external data is unavailable.
+	4.	Testing:
+	•	Comprehensive unit tests cover all critical components and edge cases.
